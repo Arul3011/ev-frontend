@@ -76,8 +76,13 @@ li:hover{
 .foot-bottom a{
     font-size:0.8rem ;
     margin:5px 0;
+    color: white;
+    text-decoration: none;
   }
 
+.foot-bottom a:hover{
+    color: #d9e99e;
+}
 
   .foot-bottom{
     display: flex;
@@ -87,13 +92,20 @@ li:hover{
 
  .foot-end{
     padding-top: 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
  }
+ 
 
  @media (max-width: 768px) {
     .foot-top{
         flex-direction: column;
     }
     .foot-bottom{
+        flex-direction: column;
+    }
+    .foot-end{
         flex-direction: column;
     }
  }

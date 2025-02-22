@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import './HeroHeader.css'
+import { useNavigate } from 'react-router-dom';
 
-const HeroHeader = () => {
-    const [longitude,setLongitude]=useState(null);
-    const [latitude,setLatitude]=useState(null);
+const HeroHeader = ({data,setData ,setLat,setLon}) => {
+    // console.log(data);
+    
+    const navigate =useNavigate();
+    // const [location,setlocation]=useState(null);
     const handleLocationClick = () =>{
         alert('Location access requested! To locate charging points')
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position)=>{
-                const {latitude, longitude} = position.coords;
-                setLongitude(longitude)
-                setLatitude(latitude)
-                // console.log(latitude);
-                // console.log(latitude);
-                
+                const {latitude,longitude} = position.coords;
+                // setlocation({latitude,longitude});
+                setLon(longitude);
+                setLat(latitude);
+                sendtoback(latitude,longitude);
             },
         (error)=>{
             alert("Unable to retrieve location.Please enable location access.")
@@ -22,6 +24,30 @@ const HeroHeader = () => {
         } else{
             alert("Geolocation is not supported by this browser.")
         }
+    };
+    
+    const sendtoback =(lat,lon) => {
+        const backurl='http://localhost:3005/api/testapi/locations';
+        const range = 30; 
+        // range=300,
+    //    const lat= 11.004556
+    //    const lon = 77.028274
+        // const range=500;
+        fetch(backurl,{method:'POST',headers:{'Content-Type':'application/json',},
+        body:JSON.stringify({range,lat,lon})
+        })
+        .then((response)=>response.json())
+        .then((data)=>{console.log('Location sent succesfully',data);
+        
+            setData(data)
+            // console.log(data);
+            
+            navigate("/location")
+            
+        })
+        .catch((error)=>{
+            console.log('Error sending location',error);
+        });
     };
     
   return (
@@ -41,6 +67,7 @@ const HeroHeader = () => {
         
         <div className='hero-div'>
             <img className='hero-header'></img>
+            
         </div>
     </header>
     </>
